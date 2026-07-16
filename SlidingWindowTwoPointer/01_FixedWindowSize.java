@@ -356,6 +356,8 @@ Check if array contains duplicates within distance k.
 Input: nums = [1,2,3,1], k = 3
 Output: true (nums[0] == nums[3], and 3 - 0 <= 3)
 
+- k+1 length sliding window
+
 Time: O(n) | Space: O(k)
 */
 
@@ -371,7 +373,7 @@ class Solution {
             window.add(nums[end]);
             
             // Slide window: once index distance exceeds k, remove element at start
-            if (end - start == k) {
+            if (end - start + 1 == k+1) {
                 window.remove(nums[start]);
                 start++;
             }
@@ -398,16 +400,21 @@ Time: O(n log n) | Space: O(1)
 class Solution {
     public int minDifference(int[] nums) {
         int n = nums.length;
-        if (n <= 4) return 0;
-        
-        Arrays.sort(nums);
-        int result = Integer.MAX_VALUE;
-        
-        // Try removing up to 3 elements total from either left or right edges
-        for (int i = 0; i <= 3; i++) {
-            result = Math.min(result, nums[n - 1 - (3 - i)] - nums[i]);
+        if(n <= 3){
+            return 0;
         }
-        return result;
+
+        Arrays.sort(nums);
+        int ans = Integer.MAX_VALUE;
+
+        // nums[n-4] - nums[0]
+        // nums[n-3] - nums[1]
+        // nums[n-2] - nums[2]
+        // nums[n-1] - nums[3]
+        for(int i=0; i<=3; i++){
+            ans = Math.min(ans, nums[n-4+i] - nums[i]);
+        }
+        return ans;
     }
 }
 
